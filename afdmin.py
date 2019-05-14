@@ -50,7 +50,7 @@ def afdMin(afd):
 		for j,qj in enumerate(afd.q):
 			if i<=j:continue
 			table[i][j]=isFinal(qi)^isFinal(qj)
-	#passo 3, repitir até parar de mudar
+	#passo 3, repetir até parar de mudar
 	while True:
 		tableNew=step3(afd.q,afd.sigma,table)
 		if tableComp(tableNew,table):break
