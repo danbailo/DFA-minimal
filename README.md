@@ -58,4 +58,4 @@ A saída do programa será:
 	Estados finais:
 	["['c', 'd', 'e']"]
 
-Este ainda perguntará se você deseja sair/parar a execução ou testar alguma palavra que o autômato; feito isso o programa retorna se a palavra inserida é reconhecida ou não.
+Este ainda perguntará se você deseja sair/parar a execução ou testar alguma palavra que o autômato reconheça; feito isso o programa retorna se a palavra inserida é reconhecida ou não.
