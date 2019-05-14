@@ -2,6 +2,7 @@ from afd import AFD,AFDState
 from ast import literal_eval as leval
 from sys import argv,exit
 import copy
+
 def readAfdFromFile(filename):
 	f=open(filename)
 	states=list(leval(f.readline().strip()))
@@ -22,17 +23,6 @@ def readAfdFromFile(filename):
 		if temp not in states:raise RuntimeError("invalid final on "+filename)
 	f.close()
 	return AFD(states,sigma,delta,initial,final)
-# def accessibleStatesFrom(q,sigma):
-# 	visited=set()
-# 	stack=[q]
-# 	while stack!=[]:
-# 		it=stack.pop()
-# 		visited.add(it)
-# 		for f in (it.feed(s) for s in sigma):
-# 			if f not in visited:stack.append(f)
-# 	ans=list(visited)
-# 	ans.sort()
-# 	return ans
 
 def afdMin(afd):
 	isFinal=lambda q:"f" in q.flag
@@ -112,39 +102,29 @@ def afdMin(afd):
 				if newqgi not in newFinals:newFinals.append(newqgi)
 	if newInitial is False:raise RuntimeError("Mergelist gerado errado")
 	return AFD(newQ,afd.sigma,newDelta,newInitial,newFinals)
-if len(argv)<2:
-	print("[USO]afdmin.py [arquivo]")
-	exit(-1)
 
-afd=readAfdFromFile(argv[1])
-afdmin=afdMin(afd)
+def show_afdMin():
+    if len(argv)<2:
+        print("[USO]main.py [arquivo]")
+        print("Por favor, adicione como parâmetro um arquivo de entrada!")
+        exit(-1)
 
-print("estados:")
-print([q.name for q in afdmin.q])
-print("sigma:")
-print(afdmin.sigma)
-print("delta:")
-for q in afdmin.q:
-	print([qq.name for qq in q.t.values()])
-print("inicial:")
-print(afdmin.initial.name)
-print("finais")
-finals=[]
-for q in afdmin.q:
-	if "f" in q.flag:
-		finals.append(q.name)
-print(finals)
+    afd=readAfdFromFile(argv[1])
+    afdmin=afdMin(afd)
 
-while True:
-	u=input("Digite uma palavra válida no alfabeto:")
-	try:
-		print("afd original:"+str(afd.feed(u)))
-	except RuntimeError as e:
-		if str(e)=="word not in sigma":
-			print("Palavra invalida, nao esta no alfabeto")
-			afd.reset()
-			continue
-		raise e
-	print("afd minima:"+str(afdmin.feed(u)))
-	afd.reset()
-	afdmin.reset()
+    print("Estados:")
+    print([q.name for q in afdmin.q])
+    print("\nSigma:")
+    print(afdmin.sigma)
+    print("\nDelta:")
+    for q in afdmin.q:
+        print([qq.name for qq in q.t.values()])
+    print("\nEstado inicial:")
+    print(afdmin.initial.name)
+    print("\nEstados finais:")
+    finals=[]
+    for q in afdmin.q:
+        if "f" in q.flag:
+            finals.append(q.name)
+    print(finals)
+    return afd,afdmin

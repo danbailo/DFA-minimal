@@ -65,26 +65,3 @@ class AFD:
 			self.currstate=self.currstate.feed(l)
 			if self.currstate==None:return False
 		return self.isLanguage()
-
-if __name__=="main":
-	q=["q1","q2","q3"]
-	sigma=alphabet+'0123456789'
-	delta=[[],[],[]]
-	for i in range(len(sigma)):
-		if i<len(alphabet):delta[0].append("q2")
-		else:delta[0].append("q3")
-
-	delta[1]=["q2"]*len(sigma)
-	delta[2]=["q3"]*len(sigma)
-	#################################
-	aut=AFD(q,sigma,delta,"q1",["q2"])
-
-
-	print(aut.feed("abcd"))
-	aut.reset()
-	print(aut.feed("1ad"))
-	aut.reset()
-	print(aut.feed("3ad"))
-	aut.reset()
-	print(aut.feed("3aa"))
-	aut.reset()
