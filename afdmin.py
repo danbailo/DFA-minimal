@@ -2,6 +2,7 @@ from afd import AFD,AFDState
 from ast import literal_eval as leval
 from sys import argv,exit
 import copy
+
 def readAfdFromFile(filename):
 	f=open(filename)
 	states=list(leval(f.readline().strip()))
@@ -98,26 +99,29 @@ def afdMin(afd):
 				if newqgi not in newFinals:newFinals.append(newqgi)
 	if newInitial is False:raise RuntimeError("Mergelist gerado errado")
 	return AFD(newQ,afd.sigma,newDelta,newInitial,newFinals)
-if len(argv)<2:
-	print("[USO]main.py [arquivo]")
-	print("Por favor, adicione como parâmetro um arquivo de entrada!")
-	exit(-1)
 
-afd=readAfdFromFile(argv[1])
-afdmin=afdMin(afd)
+def show_afdMin():
+    if len(argv)<2:
+        print("[USO]main.py [arquivo]")
+        print("Por favor, adicione como parâmetro um arquivo de entrada!")
+        exit(-1)
 
-print("Estados:")
-print([q.name for q in afdmin.q])
-print("\nSigma:")
-print(afdmin.sigma)
-print("\nDelta:")
-for q in afdmin.q:
-	print([qq.name for qq in q.t.values()])
-print("\nEstado inicial:")
-print(afdmin.initial.name)
-print("\nEstados finais:")
-finals=[]
-for q in afdmin.q:
-	if "f" in q.flag:
-		finals.append(q.name)
-print(finals)
+    afd=readAfdFromFile(argv[1])
+    afdmin=afdMin(afd)
+
+    print("Estados:")
+    print([q.name for q in afdmin.q])
+    print("\nSigma:")
+    print(afdmin.sigma)
+    print("\nDelta:")
+    for q in afdmin.q:
+        print([qq.name for qq in q.t.values()])
+    print("\nEstado inicial:")
+    print(afdmin.initial.name)
+    print("\nEstados finais:")
+    finals=[]
+    for q in afdmin.q:
+        if "f" in q.flag:
+            finals.append(q.name)
+    print(finals)
+    return afd,afdmin
