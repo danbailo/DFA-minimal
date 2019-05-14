@@ -1,6 +1,7 @@
 from afd import AFD,AFDState
 from ast import literal_eval as leval
 from sys import argv,exit
+from copy import deepcopy
 import copy
 
 def readAfdFromFile(filename):
@@ -23,8 +24,24 @@ def readAfdFromFile(filename):
 		if temp not in states:raise RuntimeError("invalid final on "+filename)
 	f.close()
 	return AFD(states,sigma,delta,initial,final)
-
+def step3(q,sigma,table):
+	table=deepcopy(table)
+	for i,qi in enumerate(q):
+		for j,qj in enumerate(q):
+			if i<=j:continue
+			for s in sigma:
+				x=q.index(qi.feed(s))
+				y=q.index(qj.feed(s))
+				if y>x:x,y=y,x
+				if table[x][y]:
+					table[i][j]=True
+	return table
 def afdMin(afd):
+	def tableComp(t1,t2):
+		b=True
+		for i in range(len(t1)):
+			b&=t1[i]==t2[i]
+		return b
 	isFinal=lambda q:"f" in q.flag
 	#passo 1
 	table=[[False]*len(afd.q) for _ in afd.q]
@@ -33,17 +50,12 @@ def afdMin(afd):
 		for j,qj in enumerate(afd.q):
 			if i<=j:continue
 			table[i][j]=isFinal(qi)^isFinal(qj)
-	#passo 3
-	for i,qi in enumerate(afd.q):
-		for j,qj in enumerate(afd.q):
-			if i<=j:continue
-			for s in afd.sigma:
-				x=afd.q.index(qi.feed(s))
-				y=afd.q.index(qj.feed(s))
-				if y>x:x,y=y,x
-				if table[x][y]:
-					table[i][j]=True
-	for i,r in enumerate(table):print(r[:i])
+	#passo 3, repitir até parar de mudar
+	while True:
+		tableNew=step3(afd.q,afd.sigma,table)
+		if tableComp(tableNew,table):break
+		table=tableNew
+	del tableNew
 	#coletar pares
 	temp=[]
 	for i,qi in enumerate(afd.q):
@@ -67,8 +79,6 @@ def afdMin(afd):
 		for g in mergeList:b|=q in g
 		if b:continue
 		mergeList.append({q})
-	print(mergeList)
-	exit()
 	#nomear novos estados
 	newQ=[]
 	for g in mergeList:
