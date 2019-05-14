@@ -53,6 +53,7 @@ def afdMin(afd):
 				if y>x:x,y=y,x
 				if table[x][y]:
 					table[i][j]=True
+	for i,r in enumerate(table):print(r[:i])
 	#coletar pares
 	temp=[]
 	for i,qi in enumerate(afd.q):
@@ -76,6 +77,8 @@ def afdMin(afd):
 		for g in mergeList:b|=q in g
 		if b:continue
 		mergeList.append({q})
+	print(mergeList)
+	exit()
 	#nomear novos estados
 	newQ=[]
 	for g in mergeList:
