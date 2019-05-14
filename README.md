@@ -4,7 +4,7 @@
 * python3
 ### Observações
 * Considerar os colchetes '[ ]' como sendo o símbolo para representar um conjunto, visto que este é representado com chaves '{ }'.
-* Por exemplo: Seguindo a observação acima, o conjunto vazio será representado por [ ] .
+* Por exemplo: seguindo a observação acima, o conjunto vazio será representado por [ ] .
 ### Executar
 Basta executar `$ python3 main.py nome_do_arquivo.txt`
 
@@ -58,4 +58,4 @@ A saída do programa será:
 	Estados finais:
 	["['c', 'd', 'e']"]
 
-Este ainda perguntará se você desejas sair do programa ou testar alguma palavra que o autômato reconheça ou não.
+Este ainda perguntará se você deseja sair/parar a execução ou testar alguma palavra que o autômato; feito isso o programa retorna se a palavra inserida é reconhecida ou não.
